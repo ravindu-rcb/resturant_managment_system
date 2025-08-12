@@ -1,21 +1,49 @@
-@extends('layouts.app')
-@section('content')
-<h3>Add Concession</h3>
-<form method="post" enctype="multipart/form-data" action="{{ route('concessions.store') }}" class="mt-3">
-  @csrf
-  <div class="mb-3"><label class="form-label">Name</label>
-    <input name="name" class="form-control" required value="{{ old('name') }}">
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ config('app.name') }} — Add Concession</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="{{ url('/') }}">{{ config('app.name') }}</a>
+    <div class="navbar-nav">
+      <a class="nav-link" href="{{ route('concessions.index') }}">Concessions</a>
+      <a class="nav-link" href="{{ route('orders.index') }}">Orders</a>
+      <a class="nav-link" href="{{ route('kitchen.index') }}">Kitchen</a>
+    </div>
   </div>
-  <div class="mb-3"><label class="form-label">Description</label>
-    <textarea name="description" class="form-control">{{ old('description') }}</textarea>
-  </div>
-  <div class="mb-3"><label class="form-label">Image</label>
-    <input type="file" name="image" class="form-control" required>
-  </div>
-  <div class="mb-3"><label class="form-label">Price (Rs)</label>
-    <input type="number" step="0.01" min="0" name="price" class="form-control" required value="{{ old('price') }}">
-  </div>
-  <button class="btn btn-primary">Save</button>
-  <a class="btn btn-outline-secondary" href="{{ route('concessions.index') }}">Cancel</a>
-</form>
-@endsection
+</nav>
+<main class="container py-4">
+  <h3>Add Concession</h3>
+
+  <form method="post" enctype="multipart/form-data" action="{{ route('concessions.store') }}" class="mt-3">
+    @csrf
+    <div class="mb-3">
+      <label class="form-label">Name</label>
+      <input name="name" class="form-control" required value="{{ old('name') }}">
+      @error('name')<div class="text-danger small">{{ $message }}</div>@enderror
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Description</label>
+      <textarea name="description" class="form-control">{{ old('description') }}</textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Image</label>
+      <input type="file" name="image" class="form-control" required>
+      @error('image')<div class="text-danger small">{{ $message }}</div>@enderror
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Price (Rs)</label>
+      <input type="number" step="0.01" min="0" name="price" class="form-control" required value="{{ old('price') }}">
+      @error('price')<div class="text-danger small">{{ $message }}</div>@enderror
+    </div>
+    <button class="btn btn-primary">Save</button>
+    <a class="btn btn-outline-secondary" href="{{ route('concessions.index') }}">Cancel</a>
+  </form>
+</main>
+</body>
+</html>
