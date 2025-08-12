@@ -1,5 +1,8 @@
 <?php
 
+App\Providers\RepositoryServiceProvider::class;
+
+
 return [
 
     /*
@@ -65,7 +68,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Colombo',
 
     /*
     |--------------------------------------------------------------------------
