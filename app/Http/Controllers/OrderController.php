@@ -51,14 +51,34 @@ class OrderController extends Controller
         return view('orders.create', compact('concessions'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $data = $request->validate([
-            'concessions' => 'required|array|min:1',
-            'concessions.*' => 'exists:concessions,id',
+            'items' => 'required|array',                // items[id] = qty
+            'items.*' => 'integer|min:1',
             'send_to_kitchen_at' => 'required|date',
         ]);
-        $this->orders->createOrder($data['concessions'], $data['send_to_kitchen_at']);
-        return redirect()->route('orders.index')->with('ok','Order created.');
+
+        // create order
+        $order = \App\Models\Order::create([
+            'send_to_kitchen_at' => $data['send_to_kitchen_at'],
+            'status' => 'Pending',
+        ]);
+
+        // line items (one row per product with quantity)
+        $concessions = \App\Models\Concession::whereIn('id', array_keys($data['items']))->get()->keyBy('id');
+
+        foreach ($data['items'] as $id => $qty) {
+            if (!isset($concessions[$id])) continue;
+            \App\Models\OrderItem::create([
+                'order_id'      => $order->id,
+                'concession_id' => $id,
+                'quantity'      => (int)$qty,
+                'price'         => $concessions[$id]->price, // snapshot
+            ]);
+        }
+
+        return redirect()->route('orders.index')->with('ok', 'Order created.');
     }
 
     public function show(Order $order) {
