@@ -204,6 +204,12 @@
     .pagination .page-item.active .page-link {
       background: var(--primary-orange);
       border-color: var(--primary-orange);
+      color: #fff;
+    }
+
+    .pagination .page-item.disabled .page-link {
+      background: #e9ecef;
+      color: #6c757d;
     }
 
     .pagination .page-link:hover {

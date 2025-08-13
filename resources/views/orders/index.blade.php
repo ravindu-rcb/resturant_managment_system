@@ -218,6 +218,12 @@
     .pagination .page-item.active .page-link {
       background: var(--primary-orange);
       border-color: var(--primary-orange);
+      color: #fff;
+    }
+
+    .pagination .page-item.disabled .page-link {
+      background: #e9ecef;
+      color: #6c757d;
     }
 
     .pagination .page-link:hover {
@@ -343,9 +349,9 @@
                   <i class="fas fa-eye me-1"></i>View
                 </a>
                 @if($o->status==='Pending')
-                  <form class="d-inline" method="post" action="{{ route('orders.sendNow',$o) }}">
+                  <form class="d-inline send-now-form" method="post" action="{{ route('orders.sendNow',$o) }}" data-order-id="{{ $o->id }}">
                     @csrf
-                    <button id="sendnow-{{ $o->id }}" class="btn btn-send-now">
+                    <button type="submit" id="sendnow-{{ $o->id }}" class="btn btn-send-now">
                       <i class="fas fa-paper-plane me-1"></i>Send Now
                     </button>
                   </form>
@@ -429,6 +435,42 @@ document.addEventListener('DOMContentLoaded', function() {
     }, index * 100);
   });
 });
+</script>
+
+<script>
+// Intercept "Send Now" to avoid full page reload
+(function(){
+  function badgeClass(s){
+    return s==='Pending' ? 'status-badge status-pending'
+         : s==='In-Progress' ? 'status-badge status-in-progress'
+         : 'status-badge status-completed';
+  }
+
+  document.addEventListener('submit', async function(e){
+    const form = e.target.closest('.send-now-form');
+    if(!form) return;
+    e.preventDefault();
+    const orderId = form.getAttribute('data-order-id');
+    const btn = document.getElementById('sendnow-'+orderId);
+    if(btn){ btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Sending...'; }
+
+    try{
+      const res = await fetch(form.action, { method:'POST', headers:{ 'X-Requested-With':'XMLHttpRequest', 'X-CSRF-TOKEN':'{{ csrf_token() }}' } });
+      if(!res.ok){ throw new Error('Request failed'); }
+      // Update UI instantly: hide button and set status to In-Progress
+      if(btn){ btn.style.display = 'none'; }
+      const badge = document.getElementById('status-'+orderId);
+      if(badge){
+        badge.dataset.status = 'In-Progress';
+        badge.className = badgeClass('In-Progress');
+        badge.textContent = 'In-Progress';
+      }
+    }catch(err){
+      if(btn){ btn.disabled = false; btn.innerHTML = '<i class="fas fa-paper-plane me-1"></i>Send Now'; }
+      alert('Failed to send order. Please try again.');
+    }
+  });
+})();
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
