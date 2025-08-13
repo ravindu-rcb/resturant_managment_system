@@ -18,32 +18,8 @@
 </head>
 <body class="bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="{{ url('/') }}">{{ config('app.name') }}</a>
-
-    <!-- left links -->
-    <div class="navbar-nav">
-      <a class="nav-link" href="{{ route('concessions.index') }}">Concessions</a>
-      <a class="nav-link" href="{{ route('orders.index') }}">Orders</a>
-      <a class="nav-link active" href="{{ route('kitchen.index') }}">Kitchen</a>
-    </div>
-
-    <!-- right side: auth block -->
-    <div class="navbar-nav ms-auto align-items-center">
-      @auth
-        <span class="navbar-text me-2">{{ auth()->user()->name }} ({{ ucfirst(auth()->user()->role) }})</span>
-        <form method="post" action="{{ route('logout') }}" class="d-inline">
-          @csrf
-          <button class="btn btn-sm btn-outline-light">Logout</button>
-        </form>
-      @else
-        <a class="nav-link" href="{{ route('login') }}">Login</a>
-        <a class="nav-link" href="{{ route('register') }}">Register</a>
-      @endauth
-    </div>
-  </div>
-</nav>
+<!-- Shared navbar component -->
+<x-nav />
 
 <main class="container py-4">
   <h3>Kitchen – In-Progress Orders</h3>
@@ -55,7 +31,7 @@
   </audio>
 
   <table class="table table-striped">
-    <thead><tr><th>#</th><th>Send Time</th><th>Items</th><th>Total</th><th>Action</th></tr></thead>
+    <thead><tr><th>Order ID</th><th>Send Time</th><th>Items</th><th>Total</th><th>Action</th></tr></thead>
     <tbody id="kitchen-table-body">
     @forelse($orders as $o)
       <tr id="order-row-{{ $o->id }}" data-order-id="{{ $o->id }}">
@@ -154,5 +130,7 @@
   setInterval(poll, 5000);
 })();
 </script>
+{{-- Needed for mobile navbar toggler --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

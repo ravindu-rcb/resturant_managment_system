@@ -8,72 +8,55 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="{{ url('/') }}">{{ config('app.name') }}</a>
-
-    <!-- left links -->
-    <div class="navbar-nav">
-      <a class="nav-link" href="{{ route('concessions.index') }}">Concessions</a>
-      <a class="nav-link" href="{{ route('orders.index') }}">Orders</a>
-      <a class="nav-link" href="{{ route('kitchen.index') }}">Kitchen</a>
-    </div>
-
-    <!-- right side auth block -->
-    <div class="navbar-nav ms-auto align-items-center">
-      @auth
-        <span class="navbar-text me-2">{{ auth()->user()->name }} ({{ ucfirst(auth()->user()->role) }})</span>
-        <form method="post" action="{{ route('logout') }}" class="d-inline">
-          @csrf
-          <button class="btn btn-sm btn-outline-light">Logout</button>
-        </form>
-      @else
-        <a class="nav-link" href="{{ route('login') }}">Login</a>
-        <a class="nav-link" href="{{ route('register') }}">Register</a>
-      @endauth
-    </div>
-  </div>
-</nav>
+<!-- Shared navbar component -->
+<x-nav />
 
 <main class="container py-4">
-  <h3>Edit Concession</h3>
+  <!-- BIG title outside the card -->
+  <h1 class="display-5 text-center mb-4">Edit Concession</h1>
 
-  <form method="post" enctype="multipart/form-data" action="{{ route('concessions.update',$concession) }}" class="mt-3">
-    @csrf @method('PUT')
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow border-0">
+        <div class="card-body p-4">
+          <form method="post" enctype="multipart/form-data" action="{{ route('concessions.update',$concession) }}">
+            @csrf @method('PUT')
 
-    <div class="mb-3">
-      <label class="form-label">Name</label>
-      <input name="name" class="form-control" required value="{{ old('name',$concession->name) }}">
-      @error('name')<div class="text-danger small">{{ $message }}</div>@enderror
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Description</label>
-      <textarea name="description" class="form-control">{{ old('description',$concession->description) }}</textarea>
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Image (leave empty to keep)</label>
-      <input type="file" name="image" class="form-control">
-      @if($concession->image_path)
-        <div class="mt-2">
-          <img src="{{ asset('storage/'.$concession->image_path) }}" width="80" height="80" style="object-fit:cover;">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input name="name" class="form-control" required value="{{ old('name',$concession->name) }}">
+              @error('name')<div class="text-danger small">{{ $message }}</div>@enderror
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Description</label>
+              <textarea name="description" class="form-control" rows="3">{{ old('description',$concession->description) }}</textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Image (leave empty to keep)</label>
+              <input type="file" name="image" class="form-control">
+              @if($concession->image_path)
+                <div class="mt-2">
+                  <img src="{{ asset('storage/'.$concession->image_path) }}" width="100" height="100" style="object-fit:cover;" class="rounded border">
+                </div>
+              @endif
+              @error('image')<div class="text-danger small">{{ $message }}</div>@enderror
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Price (Rs)</label>
+              <input type="number" step="0.01" min="0" name="price" class="form-control" required value="{{ old('price',$concession->price) }}">
+              @error('price')<div class="text-danger small">{{ $message }}</div>@enderror
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-primary">Update</button>
+              <a class="btn btn-outline-secondary" href="{{ route('concessions.index') }}">Cancel</a>
+            </div>
+          </form>
         </div>
-      @endif
-      @error('image')<div class="text-danger small">{{ $message }}</div>@enderror
+      </div>
     </div>
-
-    <div class="mb-3">
-      <label class="form-label">Price (Rs)</label>
-      <input type="number" step="0.01" min="0" name="price" class="form-control" required value="{{ old('price',$concession->price) }}">
-      @error('price')<div class="text-danger small">{{ $message }}</div>@enderror
-    </div>
-
-    <button class="btn btn-primary">Update</button>
-    <a class="btn btn-outline-secondary" href="{{ route('concessions.index') }}">Cancel</a>
-  </form>
+  </div>
 </main>
-
+{{-- Needed for mobile navbar toggler --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

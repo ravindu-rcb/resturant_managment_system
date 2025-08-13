@@ -9,32 +9,8 @@
 </head>
 <body class="bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="{{ url('/') }}">{{ config('app.name') }}</a>
-
-    <!-- left links -->
-    <div class="navbar-nav">
-      <a class="nav-link" href="{{ route('concessions.index') }}">Concessions</a>
-      <a class="nav-link active" href="{{ route('orders.index') }}">Orders</a>
-      <a class="nav-link" href="{{ route('kitchen.index') }}">Kitchen</a>
-    </div>
-
-    <!-- right side auth block -->
-    <div class="navbar-nav ms-auto align-items-center">
-      @auth
-        <span class="navbar-text me-2">{{ auth()->user()->name }} ({{ ucfirst(auth()->user()->role) }})</span>
-        <form method="post" action="{{ route('logout') }}" class="d-inline">
-          @csrf
-          <button class="btn btn-sm btn-outline-light">Logout</button>
-        </form>
-      @else
-        <a class="nav-link" href="{{ route('login') }}">Login</a>
-        <a class="nav-link" href="{{ route('register') }}">Register</a>
-      @endauth
-    </div>
-  </div>
-</nav>
+<!-- Shared navbar component -->
+<x-nav />
 
 <main class="container py-4">
   <div class="d-flex justify-content-between align-items-center mb-2">
@@ -75,6 +51,7 @@
     </tfoot>
   </table>
 </main>
-
+{{-- Needed for mobile navbar toggler --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
