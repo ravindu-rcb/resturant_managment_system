@@ -10,11 +10,7 @@ use App\Http\Controllers\ConcessionController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\KitchenController;
 
-/*
-|--------------------------------------------------------------------------
-| Auth (guest)
-|--------------------------------------------------------------------------
-*/
+/*Auth (guest)*/
 Route::middleware('guest')->group(function () {
     Route::get('/login',    [LoginController::class, 'show'])->name('login');
     Route::post('/login',   [LoginController::class, 'authenticate'])->name('login.attempt');
@@ -23,18 +19,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/register',[RegisteredUserController::class, 'store'])->name('register.store');
 });
 
-/*
-|--------------------------------------------------------------------------
-| Logout (auth)
-|--------------------------------------------------------------------------
-*/
+/*Logout (auth)*/
 Route::post('/logout', LogoutController::class)->middleware('auth')->name('logout');
 
-/*
-|--------------------------------------------------------------------------
-| Home redirect based on role (auth) or to login (guest)
-|--------------------------------------------------------------------------
-*/
+/*Home redirect based on role (auth) or to login (guest)*/
 Route::get('/', function () {
     if (!auth()->check()) {
         return redirect()->route('login');
@@ -47,11 +35,7 @@ Route::get('/', function () {
     });
 });
 
-/*
-|--------------------------------------------------------------------------
-| App routes (auth)
-|--------------------------------------------------------------------------
-*/
+/*App routes (auth)*/
 Route::middleware('auth')->group(function () {
 
     // Concessions

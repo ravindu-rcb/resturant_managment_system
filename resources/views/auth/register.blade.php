@@ -19,12 +19,12 @@
     }
     /* Translucent card with blur (match login) */
     .glass-card{
-      background: rgba(255,255,255,.82); /* make smaller (e.g., .60) if you made login more transparent */
+      background: rgba(255,255,255,.82);
       -webkit-backdrop-filter: blur(6px);
       backdrop-filter: blur(6px);
       border: 1px solid rgba(255,255,255,.35);
     }
-    /* Brand primary color for buttons: #FF9B00 */
+    /*primary color for buttons*/
     .btn-primary{
       background-color:#FF9B00 !important;
       border-color:#FF9B00 !important;
@@ -119,7 +119,7 @@
           </div>
         </div>
 
-        <!-- Optional footer text -->
+        <!-- footer text -->
         <p class="text-center text-white-50 mt-3 mb-0 small">
           &copy; {{ date('Y') }} {{ config('app.name') }}
         </p>

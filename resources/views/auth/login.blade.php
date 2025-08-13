@@ -59,7 +59,7 @@
   </div>
 </nav>
 
-<!-- Center the card below the navbar (56px is default navbar height) -->
+<!-- Center the card below the navbar -->
 <main class="d-flex align-items-center justify-content-center" style="min-height: calc(100vh - 56px);">
   <div class="container">
     <div class="row justify-content-center">
@@ -100,7 +100,7 @@
           </div>
         </div>
 
-        <!-- Optional: brand/footer text under the card -->
+        <!-- brand/footer text under the card -->
         <p class="text-center text-white-50 mt-3 mb-0 small">
           &copy; {{ date('Y') }} {{ config('app.name') }}
         </p>
